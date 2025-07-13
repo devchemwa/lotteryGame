@@ -15,6 +15,7 @@ class Player{
     protected String playerName;
     protected String phoneNumber;
     protected String playerGuess;
+    protected double amount;
     protected int tickets = 0;
     protected int attempts = 5;
     Player(){
@@ -29,6 +30,7 @@ class Player{
     void validatePhoneNumber(){
         if(phoneNumber.startsWith("0") ||phoneNumber.startsWith("1") || phoneNumber.startsWith("2") || phoneNumber.startsWith("3") || phoneNumber.startsWith("4") || phoneNumber.startsWith("5") ||phoneNumber.startsWith("6") || phoneNumber.startsWith("7") || phoneNumber.startsWith("8") || phoneNumber.startsWith("9") && phoneNumber.length() == 9){
             System.out.println("VALID PHONE NUMBER");
+            phoneNumber = "+254" + phoneNumber;
             bannerMessage();
         }else{
             System.out.println("INVALID PHONE NUMBER");
@@ -37,32 +39,33 @@ class Player{
     }
 
     void payment(){
-        System.out.print("PROCESSING PAYMENT...");
+        System.out.println("PROCESSING PAYMENT...");
     }
 
     void checkout(){
-        System.out.println("""
+        System.out.printf("""
                 =================================================================
                 |                 ** START OF RECEIPT **                        |
                 |                                                               |
                 | [*] TICKET BOUGHT SUCCESSFULLY!                               |
-                | [*] ENTER TICKET NUMBER TO PROCEED                            |
                 |                                                               |
-                =================================================================
-                """);
+                |   PLAYER: %s   AMOUNT : Ksh. %.2f                             
+                =================================================================\
+                \n
+                """,playerName,amount);
     }
     void winnerMessage(){
         System.out.printf("""
                 =================================================================
                 |                 YOU ARE THE LUCKY WINNER !                    |
                 =================================================================
-                |                                                               |
-                |       [*] YOU HAVE WON THE JACKPOT!                           |
-                |       [*] PLAYER NAME: %s                                     |
-                |       [*] PHONE NUMBER: %s                                    |
-                |       [*] AMOUNT: Ksh.10,000,000                              |
-                |       [*] TICKETS LEFT: %d                                    |
-                |                                                               |
+                |                                                               
+                |       [*] YOU HAVE WON THE JACKPOT!                           
+                |       [*] PLAYER NAME: %s                                
+                |       [*] PHONE NUMBER: %s                               
+                |       [*] AMOUNT: Ksh.10,000,000                           
+                |       [*] TICKETS LEFT: %d                                    
+                |                                                               
                 =================================================================
                 |                  BET RESPONSIBLY!                             |
                 |                  * CASH PAYOUTS SUBJECT TO TAX                |
@@ -71,6 +74,62 @@ class Player{
                 =================================================================
                 \n
                 """, playerName,phoneNumber,(tickets-1));
+        playAgain();
+    }
+
+    void playAgain(){
+        String choice;
+        Scanner get = new Scanner(System.in);
+        System.out.println("WOULD YOU WISH TO PLAY AGAIN? (Y/N)");
+        System.out.print(">> ");
+        choice = get.next();
+        switch (choice){
+            case "Y":
+                if(attempts > 0){
+                    System.out.println("YOU HAVE " + (attempts) + " ATTEMPTS REMAINING");
+                    playGame();
+                }
+                break;
+            case "N":
+                System.out.println("THANK YOU FOR PLAYING!!!");
+                System.out.println("BUY MORE TICKETS? (Y/N)");
+                System.out.print(">> ");
+                String buy  = get.next();
+                switch (buy){
+                    case "Y":
+                        buyTicket();
+                        break;
+                    case "N":
+                        System.out.println("COME BACK TOMORROW FOR NEXT JACKPOT!!");
+                        break;
+                    default:
+                        Player retry = new Player();
+                }
+                break;
+            default:
+
+        }
+    }
+
+    void loserMessage(){
+        if(attempts==0){
+            System.out.printf("""
+                =================================================================
+                |                         YOU LOST !                            |
+                =================================================================
+                   ATTEMPTS LEFT: %d      TRY AGAIN TOMORROW
+                \n
+                """,attempts);
+        }else{
+            System.out.printf("""
+                =================================================================
+                |                         YOU LOST !                            |
+                =================================================================
+                   ATTEMPTS LEFT: %d      TRY AGAIN
+                \n
+                """,attempts);
+            playAgain();
+        }
     }
 
     void buyTicket(){
@@ -89,13 +148,42 @@ class Player{
                 =================================================================
                 """);
         System.out.print(">> ");
-        choice = getChoice.nextInt();
+        choice = getChoice.nextInt(); tickets = choice;
         System.out.println("CONFIRM TO BUY " + choice +" TICKETS (Y/N)");
         System.out.print(">> ");
         confirm = getChoice.next();
         switch(confirm){
             case "Y":
-                System.out.println("AMOUNT: Ksh." + choice * price);
+                System.out.printf("AMOUNT: Ksh. %d\n", (choice * price));
+                Scanner pay = new Scanner(System.in);
+                System.out.println("ENTER AMOUNT PAID");
+                System.out.print(">> ");
+                amount = pay.nextDouble();
+                payment();
+                if(amount > (choice*price)) {
+                    double rem = amount - (choice * price);
+                    if(rem > 0){
+                        System.out.printf("BALANCE: %.2f\n", rem);
+                        System.out.println("BALANCE SETTLED? (Y/N)");
+                        System.out.print(">> ");
+                        String bal_choice = pay.next();
+                        switch (bal_choice){
+                            case "Y":
+                                checkout();
+                                playGame();
+                                break;
+                            case "N":
+                                System.out.println("GIVE BALANCE");
+                                break;
+                        }
+                    }else{
+                        System.out.println("NO BALANCE!");
+                        checkout();
+                        playGame();
+                    }
+                }else{
+                    System.out.println("NOT ENOUGH TO PAY FOR TICKET(S)!!");
+                }
                 break;
             case "N":
                 bannerMessage();
@@ -107,7 +195,29 @@ class Player{
 
     }
     void playGame(){
-
+        do{
+            System.out.printf("""
+                     =================================================================
+                     |       HELLO, %s                                            
+                     |       [*] THIS IS THE GUESSING GAME, GUESS ANY NUMBER BETWEEN |
+                     |           0-9 IN ANY ORDER                                    |
+                     |       [*] GOOD LUCK!!                                         |
+                     |                                                               |
+                     |                                                               |
+                     =================================================================
+                     \n
+                     """,playerName);
+            System.out.print(">> ");
+            Scanner get = new Scanner(System.in);
+            playerGuess = get.nextLine();
+            if(playerGuess.contains("86439812")){
+                winnerMessage();
+                break;
+            }else{
+                loserMessage();
+            }
+            attempts--;
+        }while(attempts > 0);
     }
 
     void bannerMessage(){
