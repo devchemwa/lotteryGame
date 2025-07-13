@@ -9,8 +9,7 @@
 * Use appropriate control structures.
 */
 import java.util.Scanner;
-import java.util.TreeMap;
-import java.util.regex.*;
+
 class Player{
     protected String playerName;
     protected String phoneNumber;
@@ -49,7 +48,7 @@ class Player{
                 |                                                               |
                 | [*] TICKET BOUGHT SUCCESSFULLY!                               |
                 |                                                               |
-                |   PLAYER: %s   AMOUNT : Ksh. %.2f                             
+                |   PLAYER: %s   AMOUNT : Ksh. %.2f
                 =================================================================\
                 \n
                 """,playerName,amount);
@@ -59,13 +58,13 @@ class Player{
                 =================================================================
                 |                 YOU ARE THE LUCKY WINNER !                    |
                 =================================================================
-                |                                                               
-                |       [*] YOU HAVE WON THE JACKPOT!                           
-                |       [*] PLAYER NAME: %s                                
-                |       [*] PHONE NUMBER: %s                               
-                |       [*] AMOUNT: Ksh.10,000,000                           
-                |       [*] TICKETS LEFT: %d                                    
-                |                                                               
+                |
+                |       [*] YOU HAVE WON THE JACKPOT!
+                |       [*] PLAYER NAME: %s
+                |       [*] PHONE NUMBER: %s
+                |       [*] AMOUNT: Ksh.10,000,000
+                |       [*] TICKETS LEFT: %d
+                |
                 =================================================================
                 |                  BET RESPONSIBLY!                             |
                 |                  * CASH PAYOUTS SUBJECT TO TAX                |
@@ -136,7 +135,6 @@ class Player{
         Scanner getChoice = new Scanner(System.in);
         int choice;
         String confirm;
-        String pass;
         final int price = 50;
         System.out.println("""
                 =================================================================
@@ -160,7 +158,7 @@ class Player{
                 System.out.print(">> ");
                 amount = pay.nextDouble();
                 payment();
-                if(amount > (choice*price)) {
+                if(amount >= (choice*price)) {
                     double rem = amount - (choice * price);
                     if(rem > 0){
                         System.out.printf("BALANCE: %.2f\n", rem);
@@ -198,7 +196,7 @@ class Player{
         do{
             System.out.printf("""
                      =================================================================
-                     |       HELLO, %s                                            
+                     |       HELLO, %s
                      |       [*] THIS IS THE GUESSING GAME, GUESS ANY NUMBER BETWEEN |
                      |           0-9 IN ANY ORDER                                    |
                      |       [*] GOOD LUCK!!                                         |
@@ -268,7 +266,7 @@ class Player{
                 |                                                               |
                 |  >> Type 'play' to try your luck!                             |
                 |                                                               |
-                =================================================================               
+                =================================================================
                 """);
         System.out.print(">> ");
         choice = get.nextLine();
@@ -281,12 +279,10 @@ class Player{
                 break;
         }
     }
-
 }
 
 public class LotteryGame {
     public static void main(String[] args){
         Player p1 = new Player();
-
     }
 }
