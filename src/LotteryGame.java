@@ -6,8 +6,8 @@
 * If the user exhausts all the attempts, system displays "Maximum trials reached. Try again tomorrow".
 * If the user makes the correct guess (86439812),
 * the program displays "You are the lucky winner of Ksh.1 Million. We will contact you shortly".
-* Use appropriate control structures.
-*/
+* Use appropriate control structure
+* */
 import java.util.Scanner;
 
 class Player{
@@ -27,7 +27,7 @@ class Player{
         validatePhoneNumber();
     }
     void validatePhoneNumber(){
-        if(phoneNumber.startsWith("0") ||phoneNumber.startsWith("1") || phoneNumber.startsWith("2") || phoneNumber.startsWith("3") || phoneNumber.startsWith("4") || phoneNumber.startsWith("5") ||phoneNumber.startsWith("6") || phoneNumber.startsWith("7") || phoneNumber.startsWith("8") || phoneNumber.startsWith("9") && phoneNumber.length() == 9){
+        if(phoneNumber.length() == 9){
             System.out.println("VALID PHONE NUMBER");
             phoneNumber = "+254" + phoneNumber;
             bannerMessage();
@@ -85,7 +85,7 @@ class Player{
         switch (choice){
             case "Y":
                 if(attempts > 0){
-                    System.out.println("YOU HAVE " + (attempts) + " ATTEMPTS REMAINING");
+                    System.out.println("YOU HAVE " + (attempts-=1) + " ATTEMPTS REMAINING");
                     playGame();
                 }
                 break;
@@ -126,7 +126,7 @@ class Player{
                 =================================================================
                    ATTEMPTS LEFT: %d      TRY AGAIN
                 \n
-                """,attempts);
+                """,attempts-1);
             playAgain();
         }
     }
@@ -196,9 +196,10 @@ class Player{
         do{
             System.out.printf("""
                      =================================================================
-                     |       HELLO, %s
+                     |       HELLO, %s                                  |
                      |       [*] THIS IS THE GUESSING GAME, GUESS ANY NUMBER BETWEEN |
                      |           0-9 IN ANY ORDER                                    |
+                     |       [*] MAKE AN 8-DIGIT GUESS                               | 
                      |       [*] GOOD LUCK!!                                         |
                      |                                                               |
                      |                                                               |
